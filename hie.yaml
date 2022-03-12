@@ -1,0 +1,6 @@
+cradle:
+  cabal:
+    - path: "./src"
+      component: "lib:unlifted-bool"
+    # - path: "./test"
+    #   component: "test:bytevector"
