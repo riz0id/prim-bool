@@ -1,27 +1,7 @@
 
 # `unlifted-bool`
 
-`unlifted-bool` repackages `ghc-prim` comparisons on unlifted primitives to use a `Bool#` primitive with `True#` and `False#` patterns that can be scrutinized safely.
-
-``` haskell
--- less than or equal 'Int#' comparison via `unlifted-bool`
-leInt# :: Int# -> Int# -> Bool#
-
-f# :: Int# -> Int# -> Int#
-f# a b = 
-  case leInt# a b of 
-    True#  -> 100#
-    False# -> 0#
-
--- less than or equal 'Int#' comparison via `ghc-prim` 
-(<=#) :: Int# -> Int# -> Int#
-
-f# :: Int# -> Int# -> Int#
-f# a b =
-  case a <=# b of 
-    1# -> 100#
-    _  -> 0#
-```
+`unlifted-bool` packages an unlifted representation booleans `Bool#`. `Bool#` is an `Int#` wrapper intended to replace pattern matching on `0#` or `1#` literals (as is done in `ghc-prim`) with the safer pattern synonyms `False#` and `True#` in primitive boolean functions. 
 
 ## Acknowledgements
 
