@@ -26,11 +26,3 @@ f# a b =
 ## Acknowledgements
 
 Credit to @Icelandjack [for the definition of `Bool#`](https://gitlab.haskell.org/ghc/ghc/-/wikis/unlifted-data-types):
-
-```haskell
-newtype Bool# = B# Int#
-{-# COMPLETE True#, False# #-}
-
-pattern True#  = B# 1#
-pattern False# = B# 0#
-```

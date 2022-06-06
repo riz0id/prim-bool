@@ -48,15 +48,6 @@ library
   build-depends:
     , ghc-prim
 
-test-suite examples
-  import:         common
-  type:           exitcode-stdio-1.0
-  hs-source-dirs: examples
-  main-is:        Example.hs
-
-  build-depends:
-    , unlifted-bool
-
 source-repository head
   type:     git
   location: https://github.com/riz0id/unlifted-bool
