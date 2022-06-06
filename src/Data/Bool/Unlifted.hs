@@ -1,4 +1,3 @@
-{-# LANGUAGE ImportQualifiedPost #-}
 {-# LANGUAGE KindSignatures #-}
 {-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE GADTSyntax #-}
@@ -12,7 +11,7 @@
 -- Copyright   :  (c) Jacob Leach, 2022
 -- License     :  see LICENSE
 --
--- Maintainer  :  jacobleach@protomail.com
+-- Maintainer  :  jacobleach@protonmail.com
 -- Stability   :  stable
 -- Portability :  non-portable (GHC extensions)
 --
@@ -42,14 +41,6 @@ module Data.Bool.Unlifted
     ltChar#,
     leChar#,
 
-    -- ** Int8#
-    gtInt8#,
-    geInt8#,
-    eqInt8#,
-    neInt8#,
-    ltInt8#,
-    leInt8#,
-
     -- ** Word8#
     gtWord8#,
     geWord8#,
@@ -57,14 +48,6 @@ module Data.Bool.Unlifted
     neWord8#,
     ltWord8#,
     leWord8#,
-
-    -- ** Int16#
-    gtInt16#,
-    geInt16#,
-    eqInt16#,
-    neInt16#,
-    ltInt16#,
-    leInt16#,
 
     -- ** Word16#
     gtWord16#,
@@ -74,14 +57,6 @@ module Data.Bool.Unlifted
     ltWord16#,
     leWord16#,
 
-    -- ** Int32#
-    gtInt32#,
-    geInt32#,
-    eqInt32#,
-    neInt32#,
-    ltInt32#,
-    leInt32#,
-
     -- ** Word32#
     gtWord32#,
     geWord32#,
@@ -89,14 +64,6 @@ module Data.Bool.Unlifted
     neWord32#,
     ltWord32#,
     leWord32#,
-
-    -- ** Int#
-    gtInt#,
-    geInt#,
-    eqInt#,
-    neInt#,
-    ltInt#,
-    leInt#,
 
     -- ** Word#
     gtWord#,
@@ -129,23 +96,17 @@ import GHC.Prim
     Double#,
     Float#,
     Int#,
-    Int16#,
-    Int32#,
-    Int8#,
     Word#,
     Word16#,
     Word32#,
     Word8#,
   )
-import GHC.Prim qualified as Prim
+import qualified GHC.Prim as Prim
 
 import GHC.Types
   ( RuntimeRep
       ( DoubleRep,
         FloatRep,
-        Int16Rep,
-        Int32Rep,
-        Int8Rep,
         IntRep,
         Word16Rep,
         Word32Rep,
@@ -265,37 +226,6 @@ leChar# a b = relW# Prim.leChar# a b
 
 -- -----------------------------------------------------------------------------
 --
--- 'Int8#' Relations
---
-
-infix 4 `gtInt8#`, `geInt8#`, `eqInt8#`, `ltInt8#`, `leInt8#`
-
--- | @since 1.0.0
-gtInt8# :: Int8# -> Int8# -> Bool#
-gtInt8# a b = relI8# Prim.gtInt8# a b
-
--- | @since 1.0.0
-geInt8# :: Int8# -> Int8# -> Bool#
-geInt8# a b = relI8# Prim.geInt8# a b
-
--- | @since 1.0.0
-eqInt8# :: Int8# -> Int8# -> Bool#
-eqInt8# a b = relI8# Prim.eqInt8# a b
-
--- | @since 1.0.0
-neInt8# :: Int8# -> Int8# -> Bool#
-neInt8# a b = relI8# Prim.neInt8# a b
-
--- | @since 1.0.0
-ltInt8# :: Int8# -> Int8# -> Bool#
-ltInt8# a b = relI8# Prim.ltInt8# a b
-
--- | @since 1.0.0
-leInt8# :: Int8# -> Int8# -> Bool#
-leInt8# a b = relI8# Prim.leInt8# a b
-
--- -----------------------------------------------------------------------------
---
 -- 'Word8#' Relations
 --
 
@@ -324,37 +254,6 @@ ltWord8# a b = relW8# Prim.ltWord8# a b
 -- | @since 1.0.0
 leWord8# :: Word8# -> Word8# -> Bool#
 leWord8# a b = relW8# Prim.leWord8# a b
-
--- -----------------------------------------------------------------------------
---
--- 'Int16#' Relations
---
-
-infix 4 `gtInt16#`, `geInt16#`, `eqInt16#`, `ltInt16#`, `leInt16#`
-
--- | @since 1.0.0
-gtInt16# :: Int16# -> Int16# -> Bool#
-gtInt16# a b = relI16# Prim.gtInt16# a b
-
--- | @since 1.0.0
-geInt16# :: Int16# -> Int16# -> Bool#
-geInt16# a b = relI16# Prim.geInt16# a b
-
--- | @since 1.0.0
-eqInt16# :: Int16# -> Int16# -> Bool#
-eqInt16# a b = relI16# Prim.eqInt16# a b
-
--- | @since 1.0.0
-neInt16# :: Int16# -> Int16# -> Bool#
-neInt16# a b = relI16# Prim.neInt16# a b
-
--- | @since 1.0.0
-ltInt16# :: Int16# -> Int16# -> Bool#
-ltInt16# a b = relI16# Prim.ltInt16# a b
-
--- | @since 1.0.0
-leInt16# :: Int16# -> Int16# -> Bool#
-leInt16# a b = relI16# Prim.leInt16# a b
 
 -- -----------------------------------------------------------------------------
 --
@@ -389,37 +288,6 @@ leWord16# a b = relW16# Prim.leWord16# a b
 
 -- -----------------------------------------------------------------------------
 --
--- 'Int32#' Relations
---
-
-infix 4 `gtInt32#`, `geInt32#`, `eqInt32#`, `ltInt32#`, `leInt32#`
-
--- | @since 1.0.0
-gtInt32# :: Int32# -> Int32# -> Bool#
-gtInt32# a b = relI32# Prim.gtInt32# a b
-
--- | @since 1.0.0
-geInt32# :: Int32# -> Int32# -> Bool#
-geInt32# a b = relI32# Prim.geInt32# a b
-
--- | @since 1.0.0
-eqInt32# :: Int32# -> Int32# -> Bool#
-eqInt32# a b = relI32# Prim.eqInt32# a b
-
--- | @since 1.0.0
-neInt32# :: Int32# -> Int32# -> Bool#
-neInt32# a b = relI32# Prim.neInt32# a b
-
--- | @since 1.0.0
-ltInt32# :: Int32# -> Int32# -> Bool#
-ltInt32# a b = relI32# Prim.ltInt32# a b
-
--- | @since 1.0.0
-leInt32# :: Int32# -> Int32# -> Bool#
-leInt32# a b = relI32# Prim.leInt32# a b
-
--- -----------------------------------------------------------------------------
---
 -- 'Word32#' Relations
 --
 
@@ -446,37 +314,6 @@ ltWord32# a b = relW32# Prim.ltWord32# a b
 -- | @since 1.0.0
 leWord32# :: Word32# -> Word32# -> Bool#
 leWord32# a b = relW32# Prim.leWord32# a b
-
--- -----------------------------------------------------------------------------
---
--- 'Int#' Relations
---
-
-infix 4 `gtInt#`, `geInt#`, `eqInt#`, `ltInt#`, `leInt#`
-
--- | @since 1.0.0
-gtInt# :: Int# -> Int# -> Bool#
-gtInt# a b = relI# (Prim.>#) a b
-
--- | @since 1.0.0
-geInt# :: Int# -> Int# -> Bool#
-geInt# a b = relI# (Prim.>=#) a b
-
--- | @since 1.0.0
-eqInt# :: Int# -> Int# -> Bool#
-eqInt# a b = relI# (Prim.==#) a b
-
--- | @since 1.0.0
-neInt# :: Int# -> Int# -> Bool#
-neInt# a b = relI# (Prim./=#) a b
-
--- | @since 1.0.0
-ltInt# :: Int# -> Int# -> Bool#
-ltInt# a b = relI# (Prim.<#) a b
-
--- | @since 1.0.0
-leInt# :: Int# -> Int# -> Bool#
-leInt# a b = relI# (Prim.<=#) a b
 
 -- -----------------------------------------------------------------------------
 --
@@ -587,18 +424,6 @@ relW16# r x y = intToBool# (x `r` y)
 
 relW32# :: forall (a :: TYPE 'Word32Rep). (a -> a -> Int#) -> (a -> a -> Bool#)
 relW32# r x y = intToBool# (x `r` y)
-
-relI# :: forall (a :: TYPE 'IntRep). (a -> a -> Int#) -> (a -> a -> Bool#)
-relI# r x y = intToBool# (x `r` y)
-
-relI8# :: forall (a :: TYPE 'Int8Rep). (a -> a -> Int#) -> (a -> a -> Bool#)
-relI8# r x y = intToBool# (x `r` y)
-
-relI16# :: forall (a :: TYPE 'Int16Rep). (a -> a -> Int#) -> (a -> a -> Bool#)
-relI16# r x y = intToBool# (x `r` y)
-
-relI32# :: forall (a :: TYPE 'Int32Rep). (a -> a -> Int#) -> (a -> a -> Bool#)
-relI32# r x y = intToBool# (x `r` y)
 
 relD# :: forall (a :: TYPE 'DoubleRep). (a -> a -> Int#) -> (a -> a -> Bool#)
 relD# r x y = intToBool# (x `r` y)
