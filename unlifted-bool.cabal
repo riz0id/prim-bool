@@ -2,7 +2,7 @@ cabal-version: 2.4
 
 name:         unlifted-bool
 category:     Data
-version:      1.0.0
+version:      0.1.1.0
 synopsis:     An unlifted boolean type.
 description:  An unlifted boolean type with safe pattern matching.
 license:      BSD-3-Clause
