@@ -1,6 +1,11 @@
 cradle:
   cabal:
     - path: "./src"
-      component: "lib:unlifted-bool"
-    # - path: "./test"
-    #   component: "test:bytevector"
+      component: "lib:prim-bool"
+    - path: "./test"
+      component: "test:test"
+
+dependencies:
+  - prim-bool.cabal
+  - default.nix
+  - shell.nix

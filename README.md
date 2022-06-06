@@ -1,36 +1,13 @@
+<div align="center">
 
-# `unlifted-bool`
+# prim-bool: unboxed booleans
 
-`unlifted-bool` repackages `ghc-prim` comparisons on unlifted primitives to use a `Bool#` primitive with `True#` and `False#` patterns that can be scrutinized safely.
+[![GHC 9.2.2](https://github.com/riz0id/prim-compat/actions/workflows/ghc922.yml/badge.svg)](https://github.com/riz0id/prim-compat/actions/workflows/ghc922.yml) 
 
-``` haskell
--- less than or equal 'Int#' comparison via `unlifted-bool`
-leInt# :: Int# -> Int# -> Bool#
+</div>
 
-f# :: Int# -> Int# -> Int#
-f# a b = 
-  case leInt# a b of 
-    True#  -> 100#
-    False# -> 0#
-
--- less than or equal 'Int#' comparison via `ghc-prim` 
-(<=#) :: Int# -> Int# -> Int#
-
-f# :: Int# -> Int# -> Int#
-f# a b =
-  case a <=# b of 
-    1# -> 100#
-    _  -> 0#
-```
+`prim-bool` packages an unboxed representation of booleans `Bool#`. `Bool#` is an `Int#` wrapper intended to replace pattern matching on `0#` or `1#` literals (as is done in `ghc-prim`) with the safer pattern synonyms `False#` and `True#` in primitive boolean functions. 
 
 ## Acknowledgements
 
-Credit to @Icelandjack [for the definition of `Bool#`](https://gitlab.haskell.org/ghc/ghc/-/wikis/unlifted-data-types):
-
-```haskell
-newtype Bool# = B# Int#
-{-# COMPLETE True#, False# #-}
-
-pattern True#  = B# 1#
-pattern False# = B# 0#
-```
+Credit to @Icelandjack [for the definition of `Bool#`](https://gitlab.haskell.org/ghc/ghc/-/wikis/unlifted-data-types).
