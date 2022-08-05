@@ -3,4 +3,8 @@ cradle:
     - path: "./src"
       component: "lib:unlifted-bool"
     # - path: "./test"
-    #   component: "test:bytevector"
+    #   component: "test:tests"
+
+dependencies:
+  - default.nix
+  - shell.nix

@@ -1,10 +1,6 @@
-{-# LANGUAGE KindSignatures #-}
 {-# LANGUAGE LambdaCase #-}
-{-# LANGUAGE GADTSyntax #-}
 {-# LANGUAGE MagicHash #-}
-{-# LANGUAGE PatternSynonyms #-}
-{-# LANGUAGE RankNTypes #-}
-{-# LANGUAGE UnliftedNewtypes #-}
+{-# OPTIONS_HADDOCK show-extensions #-}
 
 -- |
 -- Module      :  Data.Bool.Unlifted
@@ -17,416 +13,252 @@
 --
 -- Unlifted booleans 'Bool#' and wrapped 'GHC.Prim' operations
 --
--- @since 0.1.0.0
+-- @since 1.0.0
 module Data.Bool.Unlifted
   ( -- * Unlifted Booleans
     Bool# (False#, True#),
+    show#,
 
-    -- ** Operations
-    andB#,
-    orB#,
-    xorB#,
-    notB#,
+    -- * Logical Operations
+    and#,
+    or#,
+    xor#,
+    not#,
 
-    -- ** Conversion
-    fromBool,
-    intToBool#,
-    boolToInt#,
+    -- * Comparison
+    eq#,
+    ne#,
+    lt#,
+    le#,
+    gt#,
+    ge#,
 
-    -- ** Char#
-    gtChar#,
-    geChar#,
-    eqChar#,
-    neChar#,
-    ltChar#,
-    leChar#,
+    -- * Conversion
+    fromBool#,
+    toBool#,
 
-    -- ** Word8#
-    gtWord8#,
-    geWord8#,
-    eqWord8#,
-    neWord8#,
-    ltWord8#,
-    leWord8#,
+    -- ** Integer
+    fromInt#,
+    toInt#,
+    fromInt8#,
+    toInt8#,
+    fromInt16#,
+    toInt16#,
+    fromInt32#,
+    toInt32#,
 
-    -- ** Word16#
-    gtWord16#,
-    geWord16#,
-    eqWord16#,
-    neWord16#,
-    ltWord16#,
-    leWord16#,
-
-    -- ** Word32#
-    gtWord32#,
-    geWord32#,
-    eqWord32#,
-    neWord32#,
-    ltWord32#,
-    leWord32#,
-
-    -- ** Word#
-    gtWord#,
-    geWord#,
-    eqWord#,
-    neWord#,
-    ltWord#,
-    leWord#,
-
-    -- ** Double#
-    gtDouble#,
-    geDouble#,
-    eqDouble#,
-    neDouble#,
-    ltDouble#,
-    leDouble#,
-
-    -- ** Float#
-    gtFloat#,
-    geFloat#,
-    eqFloat#,
-    neFloat#,
-    ltFloat#,
-    leFloat#,
+    -- ** Word
+    fromWord#,
+    toWord#,
+    fromWord8#,
+    toWord8#,
+    fromWord16#,
+    toWord16#,
+    fromWord32#,
+    toWord32#,
   )
 where
 
-import GHC.Prim
-  ( Char#,
-    Double#,
-    Float#,
-    Int#,
-    Word#,
-    Word16#,
-    Word32#,
-    Word8#,
-  )
+import GHC.Prim (Int#, Int16#, Int32#, Int8#, Word#, Word8#, Word16#, Word32#)
 import qualified GHC.Prim as Prim
 
-import GHC.Types
-  ( RuntimeRep
-      ( DoubleRep,
-        FloatRep,
-        IntRep,
-        Word16Rep,
-        Word32Rep,
-        Word8Rep,
-        WordRep
-      ),
-    TYPE,
-  )
+--------------------------------------------------------------------------------
 
--- -----------------------------------------------------------------------------
+import Data.Bool.Unlifted.Core (Bool# (B#, False#, True#))
 
--- | Unlifted Boolean type
+-- Data.Bool.Unlifted.Core -----------------------------------------------------
+
+-- | Displays an unlifted boolean value as a 'String'.
+--
+-- @since 1.0.0
+show# :: Bool# -> String
+show# True# = "True#"
+show# False# = "False#"
+
+-- Boolean Operations ----------------------------------------------------------
+
+infixl 5 `or#`
+infixl 6 `xor#`
+infixl 7 `and#`
+
+-- | Boolean "and" for 'Bool#'.
+--
+-- @since 1.0.0
+and# :: Bool# -> Bool# -> Bool#
+and# (B# x) (B# y) = B# (Prim.andI# x y)
+
+-- | Boolean "or" for 'Bool#'.
+--
+-- @since 1.0.0
+or# :: Bool# -> Bool# -> Bool#
+or# (B# x) (B# y) = B# (Prim.orI# x y)
+
+-- | Boolean "exclusive or" for 'Bool#'.
+--
+-- @since 1.0.0
+xor# :: Bool# -> Bool# -> Bool#
+xor# (B# x) (B# y) = B# (x Prim./=# y)
+
+-- | Boolean "not" for 'Bool#'.
+--
+-- @since 1.0.0
+not# :: Bool# -> Bool#
+not# (B# a) = B# (Prim.notI# a)
+
+-- Comparison ------------------------------------------------------------------
+
+infix 4 `eq#`, `ne#`
+
+-- | Equality comparison of unlifted boolean values.
 --
 -- @since 0.1.0.0
-newtype Bool# :: TYPE 'IntRep where
-  B# :: Int# -> Bool#
+eq# :: Bool# -> Bool# -> Bool#
+eq# (B# x) (B# y) = B# (x Prim.==# y)
 
-{-# COMPLETE True#, False# #-}
-
--- | Unlifted 'True' pattern synonym.
+-- | Inequality comparison of unlifted boolean values.
 --
 -- @since 0.1.0.0
-pattern True# :: Bool#
-pattern True# = B# 1#
+ne# :: Bool# -> Bool# -> Bool#
+ne# (B# x) (B# y) = B# (x Prim./=# y)
 
--- | Unlifted 'False' pattern synonym.
+infix 4 `lt#`, `le#`, `gt#`, `ge#`
+
+-- | "Less than" comparison of unlifted boolean values.
 --
 -- @since 0.1.0.0
-pattern False# :: Bool#
-pattern False# = B# 0#
+lt# :: Bool# -> Bool# -> Bool#
+lt# (B# x) (B# y) = B# (x Prim.<# y)
 
--- -----------------------------------------------------------------------------
---
--- Bool# Operations
---
-
-infixr 2 `orB#`
-infixr 3 `andB#`
-
--- | 'Bool#' and.
+-- | "Less than or equal to" to comparison of unlifted boolean values.
 --
 -- @since 0.1.0.0
-andB# :: Bool# -> Bool# -> Bool#
-andB# (B# a) (B# b) = intToBool# (Prim.andI# a b)
+le# :: Bool# -> Bool# -> Bool#
+le# (B# x) (B# y) = B# (x Prim.<=# y)
 
--- | 'Bool#' or.
+-- | "Greater than" comparison of unlifted boolean values.
 --
 -- @since 0.1.0.0
-orB# :: Bool# -> Bool# -> Bool#
-orB# (B# a) (B# b) = intToBool# (Prim.orI# a b)
+gt# :: Bool# -> Bool# -> Bool#
+gt# (B# x) (B# y) = B# (x Prim.># y)
 
--- | 'Bool#' exclusive or.
+-- | "Greater than or equal to" to comparison of unlifted boolean values.
 --
 -- @since 0.1.0.0
-xorB# :: Bool# -> Bool# -> Bool#
-xorB# (B# a) (B# b) = intToBool# (Prim.xorI# a b)
+ge# :: Bool# -> Bool# -> Bool#
+ge# (B# x) (B# y) = B# (x Prim.>=# y)
 
--- | 'Bool#' complement.
+-- Conversion ------------------------------------------------------------------
+
+-- | TODO
 --
--- @since 0.1.0.0
-notB# :: Bool# -> Bool#
-notB# (B# a) = intToBool# (Prim.notI# a)
+-- @since 1.0.0
+fromBool# :: Bool -> Bool#
+fromBool# True = True#
+fromBool# False = False#
 
--- -----------------------------------------------------------------------------
+-- | TODO
 --
--- Conversion
+-- @since 1.0.0
+toBool# :: Bool# -> Bool
+toBool# True# = True
+toBool# _ = False
+
+-- Conversion - Integer --------------------------------------------------------
+
+-- | Converts an @Int#@ to an unlifted boolean.
 --
+-- @since 1.0.0
+fromInt# :: Int# -> Bool#
+fromInt# x = B# (1# Prim.==# x)
 
--- |
+-- | Converts an unlifted boolean to an @Int#@.
 --
--- @since 0.1.0.0
-fromBool :: Bool -> Bool#
-fromBool = \case True -> B# 1#; False -> B# 0#
+-- @since 1.0.0
+toInt# :: Bool# -> Int#
+toInt# (B# x) = x
 
--- |
+-- | Converts an @Int8#@ to an unlifted boolean.
 --
--- @since 0.1.0.0
-intToBool# :: Int# -> Bool#
-intToBool# = \case 1# -> True#; _ -> False#
+-- @since 1.0.0
+fromInt8# :: Int8# -> Bool#
+fromInt8# x = fromInt# (Prim.int8ToInt# x)
 
--- |
+-- | Converts an unlifted boolean to an @Int8#@.
 --
--- @since 0.1.0.0
-boolToInt# :: Bool# -> Int#
-boolToInt# = \case True# -> 1#; _ -> 0#
+-- @since 1.0.0
+toInt8# :: Bool# -> Int8#
+toInt8# x = Prim.intToInt8# (toInt# x)
 
--- -----------------------------------------------------------------------------
+-- | Converts an @Int16#@ to an unlifted boolean.
 --
--- 'Char#' Relations
+-- @since 1.0.0
+fromInt16# :: Int16# -> Bool#
+fromInt16# x = fromInt# (Prim.int16ToInt# x)
+
+-- | Converts an unlifted boolean to an @Int16#@.
 --
+-- @since 1.0.0
+toInt16# :: Bool# -> Int16#
+toInt16# x = Prim.intToInt16# (toInt# x)
 
-infix 4 `gtChar#`, `geChar#`, `eqChar#`, `ltChar#`, `leChar#`
-
--- | @since 0.1.0.0
-gtChar# :: Char# -> Char# -> Bool#
-gtChar# a b = relW# Prim.gtChar# a b
-
--- | @since 0.1.0.0
-geChar# :: Char# -> Char# -> Bool#
-geChar# a b = relW# Prim.geChar# a b
-
--- | @since 0.1.0.0
-eqChar# :: Char# -> Char# -> Bool#
-eqChar# a b = relW# Prim.eqChar# a b
-
--- | @since 0.1.0.0
-neChar# :: Char# -> Char# -> Bool#
-neChar# a b = relW# Prim.neChar# a b
-
--- | @since 0.1.0.0
-ltChar# :: Char# -> Char# -> Bool#
-ltChar# a b = relW# Prim.ltChar# a b
-
--- | @since 0.1.0.0
-leChar# :: Char# -> Char# -> Bool#
-leChar# a b = relW# Prim.leChar# a b
-
--- -----------------------------------------------------------------------------
+-- | Converts an @Int32#@ to an unlifted boolean.
 --
--- 'Word8#' Relations
+-- @since 1.0.0
+fromInt32# :: Int32# -> Bool#
+fromInt32# x = fromInt# (Prim.int32ToInt# x)
+
+-- | Converts an unlifted boolean to an @Int32#@.
 --
+-- @since 1.0.0
+toInt32# :: Bool# -> Int32#
+toInt32# x = Prim.intToInt32# (toInt# x)
 
-infix 4 `gtWord8#`, `geWord8#`, `eqWord8#`, `ltWord8#`, `leWord8#`
+-- Conversion - Word -----------------------------------------------------------
 
--- | @since 0.1.0.0
-gtWord8# :: Word8# -> Word8# -> Bool#
-gtWord8# a b = relW8# Prim.gtWord8# a b
-
--- | @since 0.1.0.0
-geWord8# :: Word8# -> Word8# -> Bool#
-geWord8# a b = relW8# Prim.geWord8# a b
-
--- | @since 0.1.0.0
-eqWord8# :: Word8# -> Word8# -> Bool#
-eqWord8# a b = relW8# Prim.eqWord8# a b
-
--- | @since 0.1.0.0
-neWord8# :: Word8# -> Word8# -> Bool#
-neWord8# a b = relW8# Prim.neWord8# a b
-
--- | @since 0.1.0.0
-ltWord8# :: Word8# -> Word8# -> Bool#
-ltWord8# a b = relW8# Prim.ltWord8# a b
-
--- | @since 0.1.0.0
-leWord8# :: Word8# -> Word8# -> Bool#
-leWord8# a b = relW8# Prim.leWord8# a b
-
--- -----------------------------------------------------------------------------
+-- | Converts an @Word#@ to an unlifted boolean.
 --
--- 'Word16#' Relations
+-- @since 1.0.0
+fromWord# :: Word# -> Bool#
+fromWord# x = B# (Prim.eqWord# 1## x)
+
+-- | Converts an unlifted boolean to an @Word#@.
 --
+-- @since 1.0.0
+toWord# :: Bool# -> Word#
+toWord# (B# x) = Prim.int2Word# x
 
-infix 4 `gtWord16#`, `geWord16#`, `eqWord16#`, `ltWord16#`, `leWord16#`
-
--- | @since 0.1.0.0
-gtWord16# :: Word16# -> Word16# -> Bool#
-gtWord16# a b = relW16# Prim.gtWord16# a b
-
--- | @since 0.1.0.0
-geWord16# :: Word16# -> Word16# -> Bool#
-geWord16# a b = relW16# Prim.geWord16# a b
-
--- | @since 0.1.0.0
-eqWord16# :: Word16# -> Word16# -> Bool#
-eqWord16# a b = relW16# Prim.eqWord16# a b
-
--- | @since 0.1.0.0
-neWord16# :: Word16# -> Word16# -> Bool#
-neWord16# a b = relW16# Prim.neWord16# a b
-
--- | @since 0.1.0.0
-ltWord16# :: Word16# -> Word16# -> Bool#
-ltWord16# a b = relW16# Prim.ltWord16# a b
-
--- | @since 0.1.0.0
-leWord16# :: Word16# -> Word16# -> Bool#
-leWord16# a b = relW16# Prim.leWord16# a b
-
--- -----------------------------------------------------------------------------
+-- | Converts an @Word8#@ to an unlifted boolean.
 --
--- 'Word32#' Relations
+-- @since 1.0.0
+fromWord8# :: Word8# -> Bool#
+fromWord8# x = fromWord# (Prim.word8ToWord# x) 
+
+-- | Converts an unlifted boolean to an @Word8#@.
 --
+-- @since 1.0.0
+toWord8# :: Bool# -> Word8#
+toWord8# x = Prim.wordToWord8# (toWord# x)
 
--- | @since 0.1.0.0
-gtWord32# :: Word32# -> Word32# -> Bool#
-gtWord32# a b = relW32# Prim.gtWord32# a b
-
--- | @since 0.1.0.0
-geWord32# :: Word32# -> Word32# -> Bool#
-geWord32# a b = relW32# Prim.geWord32# a b
-
--- | @since 0.1.0.0
-eqWord32# :: Word32# -> Word32# -> Bool#
-eqWord32# a b = relW32# Prim.eqWord32# a b
-
--- | @since 0.1.0.0
-neWord32# :: Word32# -> Word32# -> Bool#
-neWord32# a b = relW32# Prim.neWord32# a b
-
--- | @since 0.1.0.0
-ltWord32# :: Word32# -> Word32# -> Bool#
-ltWord32# a b = relW32# Prim.ltWord32# a b
-
--- | @since 0.1.0.0
-leWord32# :: Word32# -> Word32# -> Bool#
-leWord32# a b = relW32# Prim.leWord32# a b
-
--- -----------------------------------------------------------------------------
+-- | Converts an @Word16#@ to an unlifted boolean.
 --
--- 'Word#' Relations
+-- @since 1.0.0
+fromWord16# :: Word16# -> Bool#
+fromWord16# x = fromWord# (Prim.word16ToWord# x) 
+
+-- | Converts an unlifted boolean to an @Word16#@.
 --
+-- @since 1.0.0
+toWord16# :: Bool# -> Word16#
+toWord16# x = Prim.wordToWord16# (toWord# x)
 
-infix 4 `gtWord#`, `geWord#`, `eqWord#`, `ltWord#`, `leWord#`
-
--- | @since 0.1.0.0
-gtWord# :: Word# -> Word# -> Bool#
-gtWord# a b = relW# Prim.gtWord# a b
-
--- | @since 0.1.0.0
-geWord# :: Word# -> Word# -> Bool#
-geWord# a b = relW# Prim.geWord# a b
-
--- | @since 0.1.0.0
-eqWord# :: Word# -> Word# -> Bool#
-eqWord# a b = relW# Prim.eqWord# a b
-
--- | @since 0.1.0.0
-neWord# :: Word# -> Word# -> Bool#
-neWord# a b = relW# Prim.neWord# a b
-
--- | @since 0.1.0.0
-ltWord# :: Word# -> Word# -> Bool#
-ltWord# a b = relW# Prim.ltWord# a b
-
--- | @since 0.1.0.0
-leWord# :: Word# -> Word# -> Bool#
-leWord# a b = relW# Prim.leWord# a b
-
--- -----------------------------------------------------------------------------
+-- | Converts an @Word32#@ to an unlifted boolean.
 --
--- 'Double#' Relations
+-- @since 1.0.0
+fromWord32# :: Word32# -> Bool#
+fromWord32# x = fromWord# (Prim.word32ToWord# x) 
+
+-- | Converts an unlifted boolean to an @Word32#@.
 --
-
-infix 4 `gtDouble#`, `geDouble#`, `eqDouble#`, `ltDouble#`, `leDouble#`
-
--- | @since 0.1.0.0
-gtDouble# :: Double# -> Double# -> Bool#
-gtDouble# a b = relD# (Prim.>##) a b
-
--- | @since 0.1.0.0
-geDouble# :: Double# -> Double# -> Bool#
-geDouble# a b = relD# (Prim.>=##) a b
-
--- | @since 0.1.0.0
-eqDouble# :: Double# -> Double# -> Bool#
-eqDouble# a b = relD# (Prim.==##) a b
-
--- | @since 0.1.0.0
-neDouble# :: Double# -> Double# -> Bool#
-neDouble# a b = relD# (Prim./=##) a b
-
--- | @since 0.1.0.0
-ltDouble# :: Double# -> Double# -> Bool#
-ltDouble# a b = relD# (Prim.<##) a b
-
--- | @since 0.1.0.0
-leDouble# :: Double# -> Double# -> Bool#
-leDouble# a b = relD# (Prim.<=##) a b
-
--- -----------------------------------------------------------------------------
---
--- 'Float#' Relations
---
-
-infix 4 `gtFloat#`, `geFloat#`, `eqFloat#`, `ltFloat#`, `leFloat#`
-
--- | @since 0.1.0.0
-gtFloat# :: Float# -> Float# -> Bool#
-gtFloat# a b = relF# Prim.gtFloat# a b
-
--- | @since 0.1.0.0
-geFloat# :: Float# -> Float# -> Bool#
-geFloat# a b = relF# Prim.geFloat# a b
-
--- | @since 0.1.0.0
-eqFloat# :: Float# -> Float# -> Bool#
-eqFloat# a b = relF# Prim.eqFloat# a b
-
--- | @since 0.1.0.0
-neFloat# :: Float# -> Float# -> Bool#
-neFloat# a b = relF# Prim.neFloat# a b
-
--- | @since 0.1.0.0
-ltFloat# :: Float# -> Float# -> Bool#
-ltFloat# a b = relF# Prim.ltFloat# a b
-
--- | @since 0.1.0.0
-leFloat# :: Float# -> Float# -> Bool#
-leFloat# a b = relF# Prim.leFloat# a b
-
--- -----------------------------------------------------------------------------
---
--- Internal
---
-
-relW# :: forall (a :: TYPE 'WordRep). (a -> a -> Int#) -> (a -> a -> Bool#)
-relW# r x y = intToBool# (x `r` y)
-
-relW8# :: forall (a :: TYPE 'Word8Rep). (a -> a -> Int#) -> (a -> a -> Bool#)
-relW8# r x y = intToBool# (x `r` y)
-
-relW16# :: forall (a :: TYPE 'Word16Rep). (a -> a -> Int#) -> (a -> a -> Bool#)
-relW16# r x y = intToBool# (x `r` y)
-
-relW32# :: forall (a :: TYPE 'Word32Rep). (a -> a -> Int#) -> (a -> a -> Bool#)
-relW32# r x y = intToBool# (x `r` y)
-
-relD# :: forall (a :: TYPE 'DoubleRep). (a -> a -> Int#) -> (a -> a -> Bool#)
-relD# r x y = intToBool# (x `r` y)
-
-relF# :: forall (a :: TYPE 'FloatRep). (a -> a -> Int#) -> (a -> a -> Bool#)
-relF# r x y = intToBool# (x `r` y)
+-- @since 1.0.0
+toWord32# :: Bool# -> Word32#
+toWord32# x = Prim.wordToWord32# (toWord# x)
