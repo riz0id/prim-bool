@@ -91,7 +91,20 @@ module Data.Bool.Prim
 where
 
 import qualified GHC.Exts as GHC (unsafeCoerce#)
+import qualified GHC.Prim as GHC
 import GHC.Int (Int (I#))
+
+#if (MIN_VERSION_ghc_prim(0,8,0))
+
+import GHC.Prim
+  ( Char#, 
+    Double#, Float#, 
+    Int#, Int16#, Int8#, Int32#,
+    Word#, Word16#, Word8#, Word32#,
+  )
+
+#else
+
 import GHC.Prim
   ( Char#,
     Double#,
@@ -103,7 +116,9 @@ import GHC.Prim
     Word16#,
     Word8#,
   )
-import qualified GHC.Prim as GHC
+
+#endif
+
 
 import Language.Haskell.TH.Syntax
   ( Exp (AppE, ConE, LitE),
@@ -448,7 +463,7 @@ toWord16# x = GHC.unsafeCoerce# (toWord# x)
 --
 -- @since 1.0.0
 fromWord32# :: Word32# -> Bool#
-fromWord32# x = Bool# (Compat.eqWord32# (GHC.unsafeCoerce# 1##) x)
+fromWord32# x = Bool# (GHC.eqWord32# (GHC.unsafeCoerce# 1##) x)
 
 -- | Converts an unboxed boolean to an 'Word32#'.
 --
