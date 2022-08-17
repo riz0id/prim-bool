@@ -76,7 +76,7 @@ test-suite test
     , hedgehog
     , prim-bool
     , tasty
-    , tasty-hedgehog ^>= 1.2.0.0
+    , tasty-hedgehog 
 
 source-repository head
   type:     git
