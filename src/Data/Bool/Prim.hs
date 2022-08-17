@@ -1,5 +1,5 @@
 {-# LANGUAGE LambdaCase #-}
-{-# LANGUAGE MagicHash #-}
+{-# LANGUAGE CPP #-}
 {-# LANGUAGE PatternSynonyms #-}
 {-# LANGUAGE TemplateHaskellQuotes #-}
 {-# LANGUAGE UnboxedTuples #-}
@@ -65,8 +65,10 @@ module Data.Bool.Prim
     toInt8#,
     fromInt16#,
     toInt16#,
+#if (MIN_VERSION_ghc_prim(0,8,0))
     fromInt32#,
     toInt32#,
+#endif
 
     -- ** Word Casts #bool-word-casts#
     -- $section-bool-word-casts
@@ -76,8 +78,10 @@ module Data.Bool.Prim
     toWord8#,
     fromWord16#,
     toWord16#,
+#if (MIN_VERSION_ghc_prim(0,8,0))
     fromWord32#,
     toWord32#,
+#endif
 
     -- ** Floating-Point Casts #bool-floating-point-casts#
     -- $section-bool-floating-point-casts
@@ -94,11 +98,9 @@ import GHC.Prim
     Float#,
     Int#,
     Int16#,
-    Int32#,
     Int8#,
     Word#,
     Word16#,
-    Word32#,
     Word8#,
   )
 import qualified GHC.Prim as GHC
@@ -381,6 +383,8 @@ fromInt16# x = Bool# (GHC.eqInt16# (GHC.unsafeCoerce# 1#) x)
 toInt16# :: Bool# -> Int16#
 toInt16# (Bool# x) = GHC.unsafeCoerce# x
 
+#if (MIN_VERSION_ghc_prim(0,8,0))
+
 -- | Converts an 'Int32#' to an unboxed boolean.
 --
 -- @since 1.0.0
@@ -392,6 +396,8 @@ fromInt32# x = Bool# (GHC.eqInt32# (GHC.unsafeCoerce# 1#) x)
 -- @since 1.0.0
 toInt32# :: Bool# -> Int32#
 toInt32# (Bool# x) = GHC.unsafeCoerce# x
+
+#endif
 
 -- Casts - Word Casts ----------------------------------------------------------
 
@@ -436,17 +442,21 @@ fromWord16# x = Bool# (GHC.eqWord16# (GHC.unsafeCoerce# 1##) x)
 toWord16# :: Bool# -> Word16#
 toWord16# x = GHC.unsafeCoerce# (toWord# x)
 
+#if (MIN_VERSION_ghc_prim(0,8,0))
+
 -- | Converts an 'Word32#' to an unboxed boolean.
 --
 -- @since 1.0.0
 fromWord32# :: Word32# -> Bool#
-fromWord32# x = Bool# (GHC.eqWord32# (GHC.unsafeCoerce# 1##) x)
+fromWord32# x = Bool# (Compat.eqWord32# (GHC.unsafeCoerce# 1##) x)
 
 -- | Converts an unboxed boolean to an 'Word32#'.
 --
 -- @since 1.0.0
 toWord32# :: Bool# -> Word32#
 toWord32# x = GHC.unsafeCoerce# (toWord# x)
+
+#endif
 
 -- Casts - Floating Point Casts ------------------------------------------------
 

@@ -1,4 +1,3 @@
-{-# LANGUAGE MagicHash #-}
 {-# OPTIONS_GHC -Wno-unused-imports #-}
 {-# OPTIONS_HADDOCK show-extensions #-}
 
