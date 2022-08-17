@@ -1,4 +1,5 @@
 {-# LANGUAGE BlockArguments #-}
+{-# LANGUAGE CPP #-}
 {-# LANGUAGE MagicHash #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ViewPatterns #-}
@@ -7,11 +8,17 @@ module Main (main) where
 
 import Hedgehog (Property, forAll, property, (===))
 import qualified Hedgehog.Gen as Gen
-import Test.Tasty (TestTree, defaultMain, testGroup)
-import Test.Tasty.Hedgehog (testPropertyNamed)
+import Test.Tasty (TestName, TestTree, defaultMain, testGroup)
+import qualified Test.Tasty.Hedgehog as Tasty
 
 import Data.Bits (xor)
 import Data.Bool.Prim
+
+#if MIN_VERSION_tasty_hedgehog(1,2,0)
+
+import Data.String (fromString)
+
+#endif
 
 --------------------------------------------------------------------------------
 
@@ -24,30 +31,42 @@ testTree =
     "Test"
     [ testGroup
         "Conversion"
-        [ testPropertyNamed "Bool#" "Bool#" $ property do
+        [ prop "Bool" $ property do
             x <- forAll Gen.bool
             x === toBool# (fromBool# x)
-        , testPropertyNamed "String" "String" $ property do
+        , prop "String" $ property do
             x <- forAll (Gen.element ["False#", "True#"])
             x === show# (unsafeRead# x)
         ]
     , testGroup
         "Logical"
-        [ testPropertyNamed "and#" "and#" $ operator and# (&&)
-        , testPropertyNamed "or#" "or#" $ operator or# (||)
-        , testPropertyNamed "xor#" "xor#" $ operator xor# xor
-        , testPropertyNamed "not#" "not#" $ unary not# not
+        [ prop "and#" $ operator and# (&&)
+        , prop "or#" $ operator or# (||)
+        , prop "xor#" $ operator xor# xor
+        , prop "not#" $ unary not# not
         ]
     , testGroup
         "Comparison"
-        [ testPropertyNamed "gt#" "gt#" $ operator gt# (>)
-        , testPropertyNamed "ge#" "ge#" $ operator ge# (>=)
-        , testPropertyNamed "eq#" "eq#" $ operator eq# (==)
-        , testPropertyNamed "ne#" "ne#" $ operator ne# (/=)
-        , testPropertyNamed "lt#" "lt#" $ operator lt# (<)
-        , testPropertyNamed "le#" "le#" $ operator le# (<=)
+        [ prop "gt#" $ operator gt# (>)
+        , prop "ge#" $ operator ge# (>=)
+        , prop "eq#" $ operator eq# (==)
+        , prop "ne#" $ operator ne# (/=)
+        , prop "lt#" $ operator lt# (<)
+        , prop "le#" $ operator le# (<=)
         ]
     ]
+
+#if MIN_VERSION_tasty_hedgehog(1,2,0)
+
+prop :: TestName -> Property -> TestTree
+prop name = Tasty.testPropertyNamed name (fromString name)
+
+#else
+
+prop :: TestName -> Property -> TestTree
+prop = Tasty.testProperty
+
+#endif
 
 unary :: (Bool# -> Bool#) -> (Bool -> Bool) -> Property
 unary op# op = property $ do
