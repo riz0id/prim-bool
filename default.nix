@@ -7,7 +7,7 @@ let
     haskell = pkgs.haskell // {
       packages = pkgs.haskell.packages // {
         "${ghc}" = pkgs.haskell.packages."${ghc}".extend (self: _: {
-          unlifted-bool = self.callCabal2nix "unlifted-bool" ./. { };
+          prim-bool = self.callCabal2nix "prim-bool" ./. { };
         });
       };
     };
@@ -17,6 +17,7 @@ let
     config.packageOverrides = extension;
   };
 in {
-  inherit (pkgs.haskell.packages."${ghc}") unlifted-bool; 
+  inherit (pkgs.haskell.packages."${ghc}") prim-bool; 
+  inherit (pkgs) cabal-install clang llvm;
 }
 

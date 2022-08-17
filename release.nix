@@ -1,1 +1,1 @@
-(import ./default.nix { }).unlifted-bool
+(import ./default.nix { }).prim-bool
