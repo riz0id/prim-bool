@@ -24,4 +24,4 @@ jobs:
         with:
           nix_path: nixpkgs=./nix/pkgs.nix
           extra_nix_config: experimental-features = nix-command
-      - run: nix-build --attr prim-compat --argstr ghc "ghc922"
+      - run: nix-build --attr prim-bool --argstr ghc "ghc922"
