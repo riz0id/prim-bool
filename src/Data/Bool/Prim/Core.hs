@@ -1,4 +1,5 @@
 {-# LANGUAGE PatternSynonyms #-}
+{-# LANGUAGE ViewPatterns #-}
 {-# LANGUAGE TemplateHaskellQuotes #-}
 {-# LANGUAGE UnboxedTuples #-}
 {-# LANGUAGE UnliftedNewtypes #-}
@@ -49,7 +50,8 @@ pattern True# = Bool# 1#
 --
 -- @since 1.0.0
 pattern False# :: Bool#
-pattern False# = Bool# 0#
+pattern False# <- ((\_ -> Bool# 0#) -> Bool# 0#)
+  where False# = Bool# 0#
 
 {-# COMPLETE True#, False# #-}
 

@@ -58,7 +58,7 @@ library
     -- `-O` is explicitly set since none of the functions exported by this 
     -- library would benefit from higher optimization levels. This helps reduce 
     -- compile times. 
-    -O
+    -O2
 
     -- `-fregs-iterative` enables the iterative graph coloring register 
     -- allocator. This is hardly affects compile times and can produce code with
@@ -68,7 +68,14 @@ library
     -- `-fmax-simplifier-iterations` is set to keep compile times in check. 
     -- The functions in this library are simple and do not need very many 
     -- simplifier passes.
-    -fmax-simplifier-iterations=2
+    -fmax-simplifier-iterations=4
+
+    -ddump-to-file
+    -ddump-stg-final
+    -ddump-simpl
+    -dppr-cols=120
+    -dsuppress-module-prefixes
+    -dsuppress-uniques
 
   build-depends:
     , ghc-prim         >= 0.7.0  && < 0.9

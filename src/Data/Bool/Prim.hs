@@ -91,7 +91,7 @@ xor# (Bool# x) (Bool# y) = Bool# (x GHC./=# y)
 -- @since 1.0.0
 not# :: Bool# -> Bool#
 not# True# = False#
-not# _ = True#
+not# False# = True#
 
 -- Bool# - Comparison ----------------------------------------------------------
 
@@ -182,31 +182,36 @@ fromBool# False = False#
 --
 -- @since 1.0.0
 toBool# :: Bool# -> Bool
-toBool# (Bool# x) = GHC.tagToEnum# x
+toBool# True# = True 
+toBool# False# = False
 
 -- | Converts an 'Int#' to an unboxed boolean.
 --
 -- @since 1.0.0
 fromInt# :: Int# -> Bool#
-fromInt# x = Bool# (1# GHC.==# x)
+fromInt# 1# = True# 
+fromInt# _ = False#
 
 -- | Converts an unboxed boolean to an 'Int#'.
 --
 -- @since 1.0.0
 toInt# :: Bool# -> Int#
-toInt# (Bool# x) = x
+toInt# True# = 1#
+toInt# False# = 0#
 
 -- | Converts an 'Word#' to an unboxed boolean.
 --
 -- @since 1.0.0
 fromWord# :: Word# -> Bool#
-fromWord# x = Bool# (GHC.eqWord# 1## x)
+fromWord# 0## = True#
+fromWord# _ = False#
 
 -- | Converts an unboxed boolean to an 'Word#'.
 --
 -- @since 1.0.0
 toWord# :: Bool# -> Word#
-toWord# (Bool# x) = GHC.int2Word# x
+toWord# True# = 1## 
+toWord# False# = 0## 
 
 -- Casts - Read & Show ---------------------------------------------------------
 
@@ -232,4 +237,4 @@ unsafeRead# _ = errorWithoutStackTrace "Data.Int.Prim.unsafeRead#: failed to par
 -- @since 1.0.0
 show# :: Bool# -> String
 show# True# = "True#"
-show# _ = "False#"
+show# False# = "False#"
