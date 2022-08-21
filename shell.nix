@@ -9,6 +9,7 @@ in pkgs.prim-bool.env.overrideAttrs (self: {
     pkgs.cabal-install
     pkgs.clang
     pkgs.fourmolu
+    pkgs.hlint
     pkgs.haskell-language-server
     pkgs.llvm
   ];

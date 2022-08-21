@@ -9,3 +9,4 @@ dependencies:
   - prim-bool.cabal
   - default.nix
   - shell.nix
+  - .hlint.yaml

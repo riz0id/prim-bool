@@ -1,7 +1,4 @@
-{-# LANGUAGE PatternSynonyms #-}
-{-# LANGUAGE TemplateHaskellQuotes #-}
 {-# LANGUAGE UnboxedTuples #-}
-{-# LANGUAGE UnliftedNewtypes #-}
 {-# OPTIONS_HADDOCK show-extensions #-}
 
 -- |
@@ -185,8 +182,7 @@ fromBool# False = False#
 --
 -- @since 1.0.0
 toBool# :: Bool# -> Bool
-toBool# True# = True
-toBool# _ = False
+toBool# (Bool# x) = GHC.tagToEnum# x
 
 -- | Converts an 'Int#' to an unboxed boolean.
 --

@@ -31,18 +31,14 @@ common common
   default-language: Haskell2010
 
   ghc-options:
-    -- Warnings & Sanity checking
     -Wall
     -Wcompat
     -Wcpp-undef
-    -Werror
     -Widentities
     -Wmissing-export-lists
 
-    -- Optimization
-    -O2
-    -fregs-iterative
-    -fmax-simplifier-iterations=20
+  if flag(llvm) 
+    ghc-options: -fllvm 
 
   build-depends:
     , base >= 4.15.1 && < 4.17
@@ -54,8 +50,25 @@ library
   default-extensions:
     MagicHash
 
-  if flag(llvm) 
-    ghc-options: -fllvm 
+  ghc-options:
+    -- `-j4` is set (as opposed to `-j`) due to the small number of modules that 
+    -- are exported by this module.
+    -j4
+
+    -- `-O` is explicitly set since none of the functions exported by this 
+    -- library would benefit from higher optimization levels. This helps reduce 
+    -- compile times. 
+    -O
+
+    -- `-fregs-iterative` enables the iterative graph coloring register 
+    -- allocator. This is hardly affects compile times and can produce code with
+    -- fewer heap allocations.
+    -fregs-iterative
+
+    -- `-fmax-simplifier-iterations` is set to keep compile times in check. 
+    -- The functions in this library are simple and do not need very many 
+    -- simplifier passes.
+    -fmax-simplifier-iterations=2
 
   build-depends:
     , ghc-prim         >= 0.7.0  && < 0.9

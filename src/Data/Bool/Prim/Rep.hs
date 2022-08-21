@@ -39,7 +39,7 @@ module Data.Bool.Prim.Rep
 where
 
 import GHC.Types (RuntimeRep (IntRep), TYPE)
-import GHC.Prim (Int#)
+import GHC.Exts (Int#)
 
 --------------------------------------------------------------------------------
 

@@ -7,6 +7,7 @@ let
 in {
   inherit (pkgs.haskell.packages."${ghc}") 
     fourmolu
+    hlint
     prim-bool; 
     
   inherit (pkgs) 
