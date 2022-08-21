@@ -6,11 +6,11 @@ version:     1.0.1
 synopsis:    Unboxed booleans.
 description: An unboxed boolean type with safe pattern matching.
 
-author:       jake
+author:       jacob leach
 maintainer:   jacobleach@protonmail.com
 copyright:    2022, Jacob Leach
 homepage:     https://github.com/riz0id/prim-bool
-license:      BSD-3-Clause
+license:      ISC
 license-file: LICENSE
 build-type:   Simple
 
