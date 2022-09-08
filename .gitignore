@@ -2,6 +2,7 @@
 .idea
 *.log
 tmp/
+**/.zsh
 
 # HLS .gitignore
 .envrc

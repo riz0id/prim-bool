@@ -30,12 +30,22 @@ flag llvm
 common common
   default-language: Haskell2010
 
+  default-extensions:
+    ImportQualifiedPost
+
   ghc-options:
     -Wall
     -Wcompat
     -Wcpp-undef
     -Widentities
     -Wmissing-export-lists
+
+    -ddump-to-file
+    -ddump-stg-final
+    -ddump-simpl
+    -dppr-cols=120
+    -dsuppress-module-prefixes
+    -dsuppress-uniques
 
   if flag(llvm) 
     ghc-options: -fllvm 
@@ -52,30 +62,18 @@ library
 
   ghc-options:
     -- `-j4` is set (as opposed to `-j`) due to the small number of modules that 
-    -- are exported by this module.
+    -- are exported by this package.
     -j4
 
     -- `-O` is explicitly set since none of the functions exported by this 
     -- library would benefit from higher optimization levels. This helps reduce 
     -- compile times. 
-    -O2
-
-    -- `-fregs-iterative` enables the iterative graph coloring register 
-    -- allocator. This is hardly affects compile times and can produce code with
-    -- fewer heap allocations.
-    -fregs-iterative
+    -O
 
     -- `-fmax-simplifier-iterations` is set to keep compile times in check. 
     -- The functions in this library are simple and do not need very many 
     -- simplifier passes.
     -fmax-simplifier-iterations=4
-
-    -ddump-to-file
-    -ddump-stg-final
-    -ddump-simpl
-    -dppr-cols=120
-    -dsuppress-module-prefixes
-    -dsuppress-uniques
 
   build-depends:
     , ghc-prim         >= 0.7.0  && < 0.9
@@ -84,10 +82,6 @@ library
 
   exposed-modules:
     Data.Bool.Prim
-    Data.Bool.Prim.Rep
-
-  other-modules:
-    Data.Bool.Prim.Core
 
 test-suite test
   import:         common
@@ -105,6 +99,28 @@ test-suite test
     , prim-bool
     , tasty
     , tasty-hedgehog 
+
+  other-modules: 
+    Test.Compat
+    Test.Core
+    Test.Bool
+    Test.Bool.Fuzz
+    Test.Bool.Fuzz.Expr
+    Test.Bool.Fuzz.Expr.Core
+    Test.Bool.Fuzz.Expr.Gen
+    Test.Bool.Fuzz.Lit
+    Test.Bool.Fuzz.Lit.Core
+    Test.Bool.Fuzz.Lit.Gen
+    Test.Bool.Comparison
+    Test.Bool.Conversion
+    Test.Bool.Logical
+
+executable example
+  import:         common
+  hs-source-dirs: example
+  main-is:        Main.hs
+  build-depends:  prim-bool
+  ghc-options:    -O2
 
 source-repository head
   type:     git

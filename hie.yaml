@@ -4,6 +4,8 @@ cradle:
       component: "lib:prim-bool"
     - path: "./test"
       component: "test:test"
+    - path: "./example"
+      component: "exe:example"
 
 dependencies:
   - prim-bool.cabal
