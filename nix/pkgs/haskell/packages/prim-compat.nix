@@ -6,8 +6,8 @@ mkDerivation {
   version = "1.0.0";
   src = fetchgit {
     url = "https://github.com/riz0id/prim-compat";
-    sha256 = "17c8dza85im4lhgndijbmfpbjr97kanl1gffvh1n8a51hl687qmh";
-    rev = "b72cd5531fa0d932641ac2c5cc106c23f204623b";
+    sha256 = "1chjxab9pm1x3rm384jcs0zavxlp34bz56fcpc4p8xh10ggv25xc";
+    rev = "1bfd13c3ce8425a6fb0ddb71986861d0d9724863";
     fetchSubmodules = true;
   };
   libraryHaskellDepends = [ base ghc-prim ];
