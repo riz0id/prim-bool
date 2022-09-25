@@ -1,6 +1,3 @@
-{-# LANGUAGE GADTs #-}
-{-# LANGUAGE KindSignatures #-}
-{-# LANGUAGE MagicHash #-}
 
 module Test.Bool.Fuzz.Expr.Core
   ( Exp (ExpAnd, ExpXor, ExpOr, ExpNot, ExpLit),

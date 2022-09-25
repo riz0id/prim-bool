@@ -1,7 +1,3 @@
-{-# LANGUAGE BlockArguments #-}
-{-# LANGUAGE GADTs #-}
-{-# LANGUAGE KindSignatures #-}
-{-# LANGUAGE MagicHash #-}
 
 module Test.Bool.Fuzz.Expr.Gen
   ( expr,

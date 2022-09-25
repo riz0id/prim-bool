@@ -1,5 +1,3 @@
-{-# LANGUAGE MagicHash #-}
-
 module Test.Bool.Fuzz
   ( testTree,
   )

@@ -1,6 +1,3 @@
-{-# LANGUAGE GADTs #-}
-{-# LANGUAGE KindSignatures #-}
-{-# LANGUAGE MagicHash #-}
 
 module Test.Bool.Fuzz.Lit.Core
   ( Lit (LitBool, LitInt, LitWord),

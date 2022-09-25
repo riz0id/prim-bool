@@ -1,5 +1,3 @@
-{-# LANGUAGE ImportQualifiedPost #-}
-{-# LANGUAGE MagicHash #-}
 
 module Main (main, inbounds32, inbounds32#) where
 

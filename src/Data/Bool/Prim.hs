@@ -85,7 +85,7 @@ instance Lift Bool# where
 -- @since 1.0.0
 pattern False# :: Bool#
 pattern False# <-
-  ((\_ -> Bool# 0#) -> Bool# 0#)
+  (\_ -> Bool# 0# -> Bool# 0#)
   where
     False# = Bool# 0#
 

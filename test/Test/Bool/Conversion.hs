@@ -1,5 +1,3 @@
-{-# LANGUAGE BlockArguments #-}
-{-# LANGUAGE MagicHash #-}
 
 module Test.Bool.Conversion
   ( testTree,

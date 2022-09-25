@@ -15,6 +15,5 @@ in {
     cabal-install 
     clang 
     llvm;
-
 }
 

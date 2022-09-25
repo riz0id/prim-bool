@@ -2,9 +2,7 @@
   --color, 
   --cpp-simple,
   -XMagicHash,
-  -XTemplateHaskellQuotes,
-  -XUnboxedTuples,
-  -XUnliftedNewtypes,
+  -XImportQualifiedPost,
 ]
 - modules:
   - {name: GHC.Exts, as: GHC} 

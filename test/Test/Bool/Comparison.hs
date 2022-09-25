@@ -1,4 +1,3 @@
-{-# LANGUAGE MagicHash #-}
 
 module Test.Bool.Comparison
   ( testTree,

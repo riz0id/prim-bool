@@ -1,5 +1,3 @@
-{-# LANGUAGE BlockArguments #-}
-{-# LANGUAGE MagicHash #-}
 {-# LANGUAGE ViewPatterns #-}
 
 module Test.Bool.Logical (testTree) where

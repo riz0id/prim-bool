@@ -31,7 +31,7 @@ common common
   default-language: Haskell2010
 
   default-extensions:
-    ImportQualifiedPost
+    ImportQualifiedPost MagicHash
 
   ghc-options:
     -Wall
@@ -56,9 +56,6 @@ common common
 library
   import:         common
   hs-source-dirs: src
-
-  default-extensions:
-    MagicHash
 
   ghc-options:
     -- `-j4` is set (as opposed to `-j`) due to the small number of modules that 
@@ -88,6 +85,10 @@ test-suite test
   type:           exitcode-stdio-1.0
   hs-source-dirs: test
   main-is:        Test.hs
+
+  default-extensions:
+    BlockArguments GADTs ImportQualifiedPost KindSignatures MagicHash 
+    ViewPatterns
 
   ghc-options:
     -threaded
