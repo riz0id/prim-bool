@@ -20,7 +20,7 @@
 --
 -- @since 1.0.0
 module Data.Bool.Prim
-  ( Bool# (False#, True#),
+  ( Bool# (False#, True#, F#, T#),
 
     -- * Logical
     and#,
@@ -79,13 +79,6 @@ instance Lift Bool# where
   liftTyped x = unsafeCodeCoerce (lift x)
   {-# INLINE CONLIKE liftTyped #-}
 
-{-# COMPLETE True#, False# #-}
-
--- | Pattern synonym that matches to true 'Bool#' values.
---
--- @since 1.0.0
-pattern True# :: Bool#
-pattern True# = Bool# 1#
 
 -- | Pattern synonym that matches to false 'Bool#' values.
 --
@@ -95,6 +88,30 @@ pattern False# <-
   ((\_ -> Bool# 0#) -> Bool# 0#)
   where
     False# = Bool# 0#
+
+-- | Pattern synonym that matches to true 'Bool#' values.
+--
+-- @since 1.0.0
+pattern True# :: Bool#
+pattern True# = Bool# 1#
+
+{-# COMPLETE True#, False# #-}
+
+-- | Shorthand synonym for 'False#'. Pattern synonym that matches to false 
+-- 'Bool#' values.
+--
+-- @since 1.0.0
+pattern F# :: Bool# 
+pattern F# = False#
+
+-- | Shorthand synonym for 'True#'. Pattern synonym that matches to true 'Bool#' 
+-- values.
+--
+-- @since 1.0.0
+pattern T# :: Bool# 
+pattern T# = True#
+
+{-# COMPLETE T#, F# #-}
 
 -- Bool# - Logical -------------------------------------------------------------
 
@@ -284,3 +301,6 @@ unsafeRead# _ = errorWithoutStackTrace "Data.Int.Prim.unsafeRead#: failed to par
 show# :: Bool# -> String
 show# True# = "True#"
 show# False# = "False#"
+
+--------------------------------------------------------------------------------
+
