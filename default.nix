@@ -1,4 +1,4 @@
-{ ghc ? "ghc922" }:
+{ ghc ? "ghc924" }:
 
 let
   pkgs = import nix/pkgs.nix { 
@@ -6,13 +6,13 @@ let
   };
 in {
   inherit (pkgs.haskell.packages."${ghc}") 
+    cabal-install 
     fourmolu
     haskell-language-server
     hlint
     prim-bool; 
     
   inherit (pkgs) 
-    cabal-install 
     clang 
     llvm;
 }
