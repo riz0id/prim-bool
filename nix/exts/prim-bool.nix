@@ -1,4 +1,4 @@
-{ ghc ? "ghc922" }:
+{ ghc }:
 
 final: prev: 
 

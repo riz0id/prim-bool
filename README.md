@@ -2,7 +2,7 @@
 
 # prim-bool: unboxed booleans
 
-[![GHC 9.2.2](https://github.com/riz0id/prim-compat/actions/workflows/ghc922.yml/badge.svg)](https://github.com/riz0id/prim-compat/actions/workflows/ghc922.yml) 
+[![GHC 9.2.4](https://github.com/riz0id/prim-compat/actions/workflows/ghc924.yml/badge.svg)](https://github.com/riz0id/prim-compat/actions/workflows/ghc924.yml) 
 
 </div>
 

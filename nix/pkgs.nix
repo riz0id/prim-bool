@@ -10,5 +10,8 @@ import (import ./nixpkgs.nix) {
       (import exts/prim-bool.nix {
         inherit ghc;
       })
+      (import exts/text.nix {
+        inherit ghc;
+      })
     ] pkgs pkgs;
 }
