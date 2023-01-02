@@ -2,7 +2,7 @@ cabal-version: 2.4
 
 name:        prim-bool
 category:    Data
-version:     1.0.1
+version:     1.0.0
 synopsis:    Unboxed booleans.
 description: An unboxed boolean type with safe pattern matching.
 
@@ -19,8 +19,10 @@ extra-source-files:
   README.md
 
 tested-with:
-  GHC == 9.2.2
   GHC == 9.0.2
+  GHC == 9.2.2
+  GHC == 9.2.4
+  GHC == 9.4.2
 
 flag llvm
   Description: Compile using the LLVM backend.
@@ -51,7 +53,7 @@ common common
     ghc-options: -fllvm 
 
   build-depends:
-    , base >= 4.15.1 && < 4.17
+    , base >= 4.15.1 && < 4.18
 
 library
   import:         common
@@ -72,10 +74,14 @@ library
     -- simplifier passes.
     -fmax-simplifier-iterations=4
 
+    -- `-fregs-iterative` enable the iterative graph coloring register 
+    -- allocator.
+    -fregs-iterative
+
   build-depends:
-    , ghc-prim         >= 0.7.0  && < 0.9
+    , ghc-prim         >= 0.7.0  && < 0.10
     , prim-compat      >= 1.0.0  && < 1.1.0
-    , template-haskell >= 2.17.0 && < 2.19
+    , template-haskell >= 2.17.0 && < 2.20
 
   exposed-modules:
     Data.Bool.Prim

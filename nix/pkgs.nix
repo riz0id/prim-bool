@@ -1,17 +1,9 @@
-{ ghc }:
-
+args:
 
 import (import ./nixpkgs.nix) {
   config.packageOverrides = pkgs: 
-    pkgs.lib.composeManyExtensions [  
-      (import exts/prim-compat.nix {
-        inherit ghc;
-      })
-      (import exts/prim-bool.nix {
-        inherit ghc;
-      })
-      (import exts/text.nix {
-        inherit ghc;
-      })
-    ] pkgs pkgs;
+    pkgs.lib.composeManyExtensions (map (f: f args) [  
+      (import exts/prim-compat.nix)
+      (import exts/prim-bool.nix)
+    ]) pkgs pkgs;
 }
