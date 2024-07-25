@@ -23,6 +23,7 @@ tested-with:
   GHC == 9.2.2
   GHC == 9.2.4
   GHC == 9.4.2
+  GHC == 9.8.1
 
 flag llvm
   Description: Compile using the LLVM backend.
@@ -49,51 +50,51 @@ common common
     -dsuppress-module-prefixes
     -dsuppress-uniques
 
-  if flag(llvm) 
-    ghc-options: -fllvm 
+  if flag(llvm)
+    ghc-options: -fllvm
 
   build-depends:
-    , base >= 4.15.1 && < 4.18
+    , base >= 4.15.1 && < 4.20
 
 library
   import:         common
   hs-source-dirs: src
 
   ghc-options:
-    -- `-j4` is set (as opposed to `-j`) due to the small number of modules that 
+    -- `-j4` is set (as opposed to `-j`) due to the small number of modules that
     -- are exported by this package.
     -j4
 
-    -- `-O` is explicitly set since none of the functions exported by this 
-    -- library would benefit from higher optimization levels. This helps reduce 
-    -- compile times. 
+    -- `-O` is explicitly set since none of the functions exported by this
+    -- library would benefit from higher optimization levels. This helps reduce
+    -- compile times.
     -O
 
-    -- `-fmax-simplifier-iterations` is set to keep compile times in check. 
-    -- The functions in this library are simple and do not need very many 
+    -- `-fmax-simplifier-iterations` is set to keep compile times in check.
+    -- The functions in this library are simple and do not need very many
     -- simplifier passes.
     -fmax-simplifier-iterations=4
 
-    -- `-fregs-iterative` enable the iterative graph coloring register 
+    -- `-fregs-iterative` enable the iterative graph coloring register
     -- allocator.
     -fregs-iterative
 
   build-depends:
-    , ghc-prim         >= 0.7.0  && < 0.10
+    , ghc-prim         >= 0.7.0  && < 0.12
     , prim-compat      >= 1.0.0  && < 1.1.0
-    , template-haskell >= 2.17.0 && < 2.20
+    , template-haskell >= 2.17.0 && < 2.22
 
   exposed-modules:
     Data.Bool.Prim
 
-test-suite test
+test-suite prim-bool-test
   import:         common
   type:           exitcode-stdio-1.0
   hs-source-dirs: test
   main-is:        Test.hs
 
   default-extensions:
-    BlockArguments GADTs ImportQualifiedPost KindSignatures MagicHash 
+    BlockArguments GADTs ImportQualifiedPost KindSignatures MagicHash
     ViewPatterns
 
   ghc-options:
@@ -105,9 +106,9 @@ test-suite test
     , hedgehog
     , prim-bool
     , tasty
-    , tasty-hedgehog 
+    , tasty-hedgehog
 
-  other-modules: 
+  other-modules:
     Test.Compat
     Test.Core
     Test.Bool

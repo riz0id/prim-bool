@@ -1,15 +1,9 @@
-{ ghc ? "ghc924" }:
+{ ghc ? "ghc981" }:
 
-let 
-  pkgs = import ./default.nix { 
-    inherit ghc; 
-  };
-in pkgs.prim-bool.env.overrideAttrs (self: {
-  buildInputs = self.buildInputs ++ (with pkgs; [ 
-    pkgs.cabal-install
-    pkgs.clang
-    pkgs.fourmolu
-    pkgs.haskell-language-server
-    pkgs.llvm
-  ]);
-})
+# This retrieves the default develop shell from `flake.nix`. This is only needed
+# for backward compatibility with Haskell tooling that doesn't support flakes
+# directly yet.
+let
+  flake = builtins.getFlake ("git+file://" + toString ./.);
+  system = builtins.currentSystem;
+in flake.devShells."${system}".default

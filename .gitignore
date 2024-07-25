@@ -3,6 +3,7 @@
 *.log
 tmp/
 **/.zsh
+.vscode
 
 # HLS .gitignore
 .envrc

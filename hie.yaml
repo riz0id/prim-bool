@@ -3,7 +3,7 @@ cradle:
     - path: "./src"
       component: "lib:prim-bool"
     - path: "./test"
-      component: "test:test"
+      component: "test:prim-bool-test"
     - path: "./example"
       component: "exe:example"
 

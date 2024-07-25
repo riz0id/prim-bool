@@ -1,9 +1,10 @@
 - arguments: [
-  --color, 
-  --cpp-simple,
-  -XMagicHash,
-  -XImportQualifiedPost,
-]
+    --color, 
+    --cpp-simple,
+    -XMagicHash,
+    -XImportQualifiedPost,
+  ]
+
 - modules:
   - {name: GHC.Exts, as: GHC} 
   - {
