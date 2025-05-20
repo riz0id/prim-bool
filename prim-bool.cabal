@@ -54,7 +54,7 @@ common common
     ghc-options: -fllvm
 
   build-depends:
-    , base >= 4.15.1 && < 4.20
+    , base >= 4.15.1 && < 4.22
 
 library
   import:         common
@@ -80,9 +80,9 @@ library
     -fregs-iterative
 
   build-depends:
-    , ghc-prim         >= 0.7.0  && < 0.12
+    , ghc-prim         >= 0.7.0  && < 0.14
     , prim-compat      >= 1.0.0  && < 1.1.0
-    , template-haskell >= 2.17.0 && < 2.22
+    , template-haskell >= 2.17.0 && < 2.24
 
   exposed-modules:
     Data.Bool.Prim
